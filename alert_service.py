@@ -5,7 +5,7 @@ from email.message import EmailMessage
 
 SENDER = "dhanuvagman69@gmail.com"
 PASSWORD = ""
-RECEIVER = "dhanushinsit@gmail.com"
+RECEIVER = "sahanabb15@gmail.com"
 
 def send_emails(folder_path):
     msg = EmailMessage()
