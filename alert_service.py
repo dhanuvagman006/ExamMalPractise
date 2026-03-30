@@ -6,7 +6,7 @@ from email.message import EmailMessage
 from db import get_receiver_email, get_sender_email, log_alert
 
 SENDER = "dhanuvagman69@gmail.com"
-PASSWORD = ""
+PASSWORD = "azbqclhyzkegpifv"
 RECEIVER = "sahanabb15@gmail.com"
 
 def send_emails(folder_path):

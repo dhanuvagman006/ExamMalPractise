@@ -84,6 +84,7 @@ for _sig in (getattr(signal, "SIGINT", None), getattr(signal, "SIGTERM", None)):
 
 webbrowser.open(f'http://localhost:5000')
 print(f"--->>> Flask Server Running on http://localhost:5000")
+
 model = YOLO('best.pt')
 
 init_db()
