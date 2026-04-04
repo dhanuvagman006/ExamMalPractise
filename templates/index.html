@@ -553,31 +553,7 @@
             </div>
         </div>
 
-        <!-- SQL Console panel -->
-        <div class="panel">
-            <div class="panel-title">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="16 18 22 12 16 6"/>
-                    <polyline points="8 6 2 12 8 18"/>
-                </svg>
-                SQL Console
-            </div>
-            <div class="status-text" style="margin-bottom:10px; margin-top:-8px;">Allowed: SELECT · WITH · PRAGMA (single statement)</div>
 
-            <div class="field">
-                <textarea class="input" id="sql-input" spellcheck="false"
-                    placeholder="SELECT * FROM detections ORDER BY id DESC LIMIT 5"></textarea>
-            </div>
-
-            <div class="field-row">
-                <button class="btn btn-sm" id="run-sql">
-                    Run Query
-                </button>
-                <div class="status-text" id="sql-status" style="margin-top:0; align-self:center;"></div>
-            </div>
-
-            <div class="console-out" id="sql-output">Ready.</div>
-        </div>
 
     </aside>
 </div>
@@ -628,40 +604,7 @@
         .catch(() => setStatus('receiver-status', 'Save failed', 'err'));
     });
 
-    // SQL console
-    function formatTable(columns, rows) {
-        if (!columns || !columns.length) return 'No columns.';
-        if (!rows || !rows.length) return columns.join('\t') + '\n(no rows)';
-        const lines = [columns.join('\t'), '─'.repeat(Math.min(120, columns.join('\t').length))];
-        for (const r of rows)
-            lines.push(r.map(v => v == null ? 'NULL' : String(v)).join('\t'));
-        return lines.join('\n');
-    }
 
-    document.getElementById('run-sql').addEventListener('click', () => {
-        const sql = document.getElementById('sql-input').value || '';
-        setStatus('sql-status', 'Running…');
-        document.getElementById('sql-output').textContent = '';
-        fetch('/api/sql', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sql, limit: 200 })
-        })
-        .then(r => r.json().then(j => ({ s: r.status, j })))
-        .then(({ s, j }) => {
-            if (s >= 200 && s < 300 && j && j.ok) {
-                setStatus('sql-status', `OK — ${j.row_count} row${j.row_count !== 1 ? 's' : ''}`, 'ok');
-                document.getElementById('sql-output').textContent = formatTable(j.columns, j.rows);
-            } else {
-                setStatus('sql-status', 'Error', 'err');
-                document.getElementById('sql-output').textContent = (j && j.error) ? j.error : 'Query failed';
-            }
-        })
-        .catch(() => {
-            setStatus('sql-status', 'Error', 'err');
-            document.getElementById('sql-output').textContent = 'Query failed';
-        });
-    });
 </script>
 </body>
 </html>
